@@ -32,4 +32,33 @@ public class ContatoDao {
 		// Closing statement
 		stmt.close();
 	}
+	
+	public List<ContatoBean> listContatos() throws SQLException{
+		List<ContatoBean> contatos = new ArrayList<ContatoBean>();
+		
+		String sql =	"select * from contatos";
+		
+		PreparedStatement stmt = connection.prepareStatement(sql);
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()){
+			ContatoBean contato = new ContatoBean();
+			contato.setNome(rs.getString("nome"));
+			contato.setEmail(rs.getString("email"));
+			contato.setEndereco(rs.getString("endereco"));
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(rs.getDate("dataNascimento"));
+			
+			contato.setDataNascimento(calendar);
+			
+			contatos.add(contato);
+		}
+		
+		rs.close();
+		stmt.close();
+		
+		return contatos;
+	}
 }
